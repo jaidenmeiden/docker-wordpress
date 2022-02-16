@@ -296,3 +296,7 @@ public/images/*
 !.vscode/*.code-snippets
 
 # End of https://www.toptal.com/developers/gitignore/api/laravel,node,phpstorm,visualstudiocode
+
+### Project ###
+data/
+taget/
