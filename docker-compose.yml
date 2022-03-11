@@ -40,6 +40,24 @@ services:
         depends_on:
             - ${APP_IMG_DB_INTERNAL}
 
+    # Environment
+    node:
+        container_name: "${APP_NAME}_node"
+        ports:
+            - ${NODE_PORT}:3000
+        build:
+            context: ./
+            dockerfile: docker-compose/node/node.dockerfile
+        volumes:
+            - ./workplace/${APP_NAME}/target:/usr/src/app
+            - /usr/src/app/node_modules
+        tty: true
+        networks:
+            - internal_network
+        # Wait for "web" container to start first
+        depends_on:
+            - web
+
     # Database management
     pma:
         image: ${APP_IMAGE_PHPADMIN}
