@@ -7,7 +7,7 @@ services:
         image: ${APP_IMAGE_MYSQL}
         container_name: "${APP_NAME}_database"
         volumes:
-            - ./workplace/${APP_NAME}/data:/var/lib/mysql
+            - ./workplace/data:/var/lib/mysql
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
@@ -33,7 +33,7 @@ services:
         container_name: "${APP_NAME}_web"
         restart: unless-stopped
         volumes:
-            - ./:/var/www/html
+            - ./workplace/target:/var/www/html
         environment:
             - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
             - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
