@@ -3,6 +3,7 @@ version: '3.8'
 services:
     # Database
     database:
+        user: "${UID}:${GID}"
         image: ${APP_IMAGE_MYSQL}
         container_name: "${APP_NAME}_database"
         volumes:
@@ -22,6 +23,7 @@ services:
 
     # Web Server
     web:
+        user: "${UID}:${GID}"
         image: ${APP_IMAGE_WORDPRESS}
         container_name: "${APP_NAME}_web"
         restart: unless-stopped
@@ -43,6 +45,7 @@ services:
 
     # Database management
     pma:
+        user: "${UID}:${GID}"
         image: ${APP_IMAGE_PHPADMIN}
         container_name: "${APP_NAME}_pma"
         environment:
