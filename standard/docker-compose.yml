@@ -21,9 +21,9 @@ services:
             - internal_network
 
     # Web Server
-    wordpress:
+    web:
         image: ${APP_IMAGE_WORDPRESS}
-        container_name: "${APP_NAME}_wordpress"
+        container_name: "${APP_NAME}_web"
         restart: unless-stopped
         working_dir: /var/www/html
         volumes:
