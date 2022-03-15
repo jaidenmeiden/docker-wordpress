@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+    # Database
+    database:
+        user: "${UID}:${GID}"
+        image: ${APP_IMAGE_MYSQL}
+        container_name: "${APP_NAME}_database"
+        volumes:
+            - ./workplace/${APP_NAME}/data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: ${DB_CONNECTION}
+        ports:
+            - ${DB_PORT}:3306
+        networks:
+            - internal_network
+
+    # Web Server
+    web:
+        user: "${UID}:${GID}"
+        image: ${APP_IMAGE_WORDPRESS}
+        container_name: "${APP_NAME}_web"
+        restart: always
+        working_dir: /var/www/html
+        volumes:
+            - ./workplace/${APP_NAME}/target:/var/www/html
+        environment:
+            - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+            - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
+            - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+            - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}:3306
+        ports:
+            - ${APP_PORT}:80
+        networks:
+            - internal_network
+        # Wait for "database" container to start first
+        depends_on:
+            - ${APP_IMG_DB_INTERNAL}
+
+    # Database management
+    pma:
+        user: "${UID}:${GID}"
+        image: ${APP_IMAGE_PHPADMIN}
+        container_name: "${APP_NAME}_pma"
+        restart: always
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=${DB_PMA_HOST}
+            - PMA_USER=${DB_USERNAME}
+            - PMA_PASSWORD=${DB_PASSWORD}
+            - PMA_PORT=3306
+        ports:
+            - ${DB_PMA_PORT}:80
+        networks:
+            - internal_network
+        # Wait for "database" container to start first
+        depends_on:
+            - ${APP_IMG_DB_INTERNAL}
+
+# Define networks
+networks:
+    internal_network:
+        driver: bridge
