@@ -23,13 +23,17 @@ services:
 
     # Web Server
     web:
-        user: "${UID}:${GID}"
-        image: ${APP_IMAGE_WORDPRESS}
+        build:
+            context: ./
+            dockerfile: Dockerfile
+            args:
+                uid: ${UID}
+                gid: ${GID}
+                image_wordpress: ${APP_IMAGE_WORDPRESS}
         container_name: "${APP_NAME}_web"
-        restart: always
-        working_dir: /var/www/html
+        restart: unless-stopped
         volumes:
-            - ./workplace/${APP_NAME}/target:/var/www/html
+            - ./:/var/www/html
         environment:
             - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
             - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
