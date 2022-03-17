@@ -1,6 +1,4 @@
 # Arguments defined in docker-compose.yml
-ARG uid
-ARG gid
 ARG image_wordpress
 
 FROM $image_wordpress as wordpress
