@@ -30,7 +30,7 @@ services:
         container_name: "${APP_NAME}_web"
         restart: always
         volumes:
-            - ./workplace/target:/var/www/html
+            - ./workplace/${APP_WORKPLACE}:/var/www/html
         environment:
             - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
             - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
